@@ -1,0 +1,12 @@
+# 平台检测
+if(WIN32)
+    add_definitions(-DPLATFORM_WINDOWS)
+    set(PLATFORM_SOURCES ${SOURCE_CODE_DIR}/platform/windows/serial_win.cpp)
+    set(PLATFORM_HEADERS ${SOURCE_CODE_DIR}/platform/windows)
+elseif(UNIX AND NOT APPLE)
+    add_definitions(-DPLATFORM_LINUX)
+    set(PLATFORM_SOURCES ${SOURCE_CODE_DIR}/platform/linux/serial_linux.cpp)
+    set(PLATFORM_HEADERS ${SOURCE_CODE_DIR}/platform/linux)
+else()
+    message(FATAL_ERROR "Unsupported platform")
+endif()

@@ -1,0 +1,12 @@
+[submodule "depend/spdlog"]
+	path = depend/spdlog
+	url = git@github.com:gabime/spdlog.git
+[submodule "depend/asio"]
+	path = depend/asio
+	url = git@github.com:chriskohlhoff/asio.git
+[submodule "depend/fmt"]
+	path = depend/fmt
+	url = git@github.com:fmtlib/fmt.git
+[submodule "depend/udp-tcp-communicate"]
+	path = depend/udp-tcp-communicate
+	url = git@github.com:3shisan3/udp-tcp-communicate.git
