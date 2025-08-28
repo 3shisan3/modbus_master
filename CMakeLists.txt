@@ -4,9 +4,6 @@ project(modbus_master LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# 源码目录
-set(SOURCE_CDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
-
 # 设置路径变量
 set(3DEPEND_DIR ${CMAKE_CURRENT_SOURCE_DIR}/depend)
 set(3RD_DIR ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/${SDK_PLATFORM})
@@ -18,6 +15,9 @@ include_directories(
     ${SOURCE_CODE_DIR}/driver
     ${PLATFORM_HEADERS}
 )
+
+# 源码目录
+set(SOURCE_CDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 # 收集项目源文件
 file(GLOB_RECURSE PROJECT_SRCS
