@@ -1,40 +1,51 @@
 cmake_minimum_required(VERSION 3.12)
 project(modbus_master LANGUAGES CXX)
 
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
+# 设置构建选项前提
+option(MODBUS_BUILD_SHARED "Build shared library" ON)
+include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/option.cmake)
 
 # 设置路径变量
 set(3DEPEND_DIR ${CMAKE_CURRENT_SOURCE_DIR}/depend)
 set(3RD_DIR ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/${SDK_PLATFORM})
 
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+# 源码目录
+set(SOURCE_CODE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
+
+include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/platform.cmake)
+
 # 包含目录
 include_directories(
-    ${SOURCE_CODE_DIR}/api
     ${SOURCE_CODE_DIR}/communicate
-    ${SOURCE_CODE_DIR}/driver
     ${PLATFORM_HEADERS}
 )
 
-# 源码目录
-set(SOURCE_CDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
-
 # 收集项目源文件
 file(GLOB_RECURSE PROJECT_SRCS
-    ${SOURCE_CODE_DIR}/api/*.cpp
     ${SOURCE_CODE_DIR}/communicate/*.cpp
-    ${SOURCE_CODE_DIR}/driver/*.cpp
+    ${PLATFORM_SOURCES}
 )
 
-# # 创建可执行文件
-# add_executable(${PROJECT_NAME}
-#     ${PROJECT_SRCS}
-#     ${PLATFORM_SOURCES}
-#     ${SOURCE_CODE_DIR}/main.cpp)
+# 补充依赖库内容
+include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/depend.cmake)
+# manage_spdlog()   # 依赖 udp-tcp-communicate 中依赖
+manage_asio()
+manage_fmt()
+manage_udptcp()
 
-# # 链接库
-# target_link_libraries(${PROJECT_NAME} PRIVATE
-#     ${SPDLOG_LIBRARY}
-#     ${TCP_UDP_COMM_LIBRARY}
-#     fmt::fmt)
+# 编译生成库
+if(MODBUS_BUILD_SHARED OR BUILD_SHARED_LIBS)
+    add_library(${PROJECT_NAME} SHARED ${PROJECT_SRCS})
+else()
+    add_library(${PROJECT_NAME} STATIC ${PROJECT_SRCS})
+endif()
+
+# 链接库
+target_link_libraries(${PROJECT_NAME} PRIVATE
+    # spdlog::spdlog
+    udp-tcp-communicate
+    fmt::fmt)
 

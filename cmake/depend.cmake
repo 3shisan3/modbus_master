@@ -46,7 +46,7 @@ function(manage_spdlog)
 
             # 设置动态库选项传递给子项目
             set(SPDLOG_BUILD_SHARED ${SPDLOG_USE_SHARED} PARENT_SCOPE)
-            add_subdirectory("${LOCAL_DEPS_DIR}/spdlog" spdlog)
+            add_subdirectory("${3DEPEND_DIR}/spdlog" spdlog)
             return()
         else()
             message(WARNING "Local spdlog not found at ${3DEPEND_DIR}/spdlog")
@@ -189,74 +189,75 @@ function(manage_fmt)
 endfunction()
 
 # udp_tcp_communicate依赖管理
-function(manage_tcp_udp_communicate)
-    message(STATUS "Configuring tcp_udp_communicate dependency...")
+function(manage_udptcp)
+    message(STATUS "Configuring udp-tcp-communicate dependency...")
     
-    if(TCP_UDP_USE_SYSTEM)
-        find_package(tcp_udp_communicate QUIET)
-        if(tcp_udp_communicate_FOUND)
-            message(STATUS "  Using system-installed tcp_udp_communicate")
+    if(UDPTCP_USE_SYSTEM)
+        find_package(udp-tcp-communicate QUIET)
+        if(udp-tcp-communicate_FOUND)
+            message(STATUS "  Using system-installed udp-tcp-communicate")
             return()
         else()
-            message(WARNING "System tcp_udp_communicate not found, falling back to next option")
+            message(WARNING "System udp-tcp-communicate not found, falling back to next option")
         endif()
     endif()
 
-    if(TCP_UDP_USE_PACKAGED)
-        if(EXISTS "${3RD_DIR}/tcp_udp_communicate/lib" AND EXISTS "${3RD_DIR}/tcp_udp_communicate/include")
-            message(STATUS "  Using pre-packaged tcp_udp_communicate from ${3RD_DIR}/tcp_udp_communicate")
+    if(UDPTCP_USE_PACKAGED)
+        if(EXISTS "${3RD_DIR}/udp-tcp-communicate/lib" AND EXISTS "${3RD_DIR}/udp-tcp-communicate/include")
+            message(STATUS "  Using pre-packaged udp-tcp-communicate from ${3RD_DIR}/udp-tcp-communicate")
             
             # 根据动态库选项选择库文件
-            if(UDPTCP_SHARED AND EXISTS "${3RD_DIR}/tcp_udp_communicate/lib/${CMAKE_SHARED_LIBRARY_PREFIX}tcp_udp_communicate${CMAKE_SHARED_LIBRARY_SUFFIX}")
-                add_library(tcp_udp_communicate_packaged SHARED IMPORTED)
-                set_target_properties(tcp_udp_communicate_packaged PROPERTIES
-                    IMPORTED_LOCATION "${3RD_DIR}/tcp_udp_communicate/lib/${CMAKE_SHARED_LIBRARY_PREFIX}tcp_udp_communicate${CMAKE_SHARED_LIBRARY_SUFFIX}"
-                    INTERFACE_INCLUDE_DIRECTORIES "${3RD_DIR}/tcp_udp_communicate/include"
+            if(UDPTCP_SHARED AND EXISTS "${3RD_DIR}/udp-tcp-communicate/lib/${CMAKE_SHARED_LIBRARY_PREFIX}udp-tcp-communicate${CMAKE_SHARED_LIBRARY_SUFFIX}")
+                add_library(udp-tcp-communicate_packaged SHARED IMPORTED)
+                set_target_properties(udp-tcp-communicate_packaged PROPERTIES
+                    IMPORTED_LOCATION "${3RD_DIR}/udp-tcp-communicate/lib/${CMAKE_SHARED_LIBRARY_PREFIX}udp-tcp-communicate${CMAKE_SHARED_LIBRARY_SUFFIX}"
+                    INTERFACE_INCLUDE_DIRECTORIES "${3RD_DIR}/udp-tcp-communicate/include"
                 )
             else()
-                add_library(tcp_udp_communicate_packaged STATIC IMPORTED)
-                set_target_properties(tcp_udp_communicate_packaged PROPERTIES
-                    IMPORTED_LOCATION "${3RD_DIR}/tcp_udp_communicate/lib/${CMAKE_STATIC_LIBRARY_PREFIX}tcp_udp_communicate${CMAKE_STATIC_LIBRARY_SUFFIX}"
-                    INTERFACE_INCLUDE_DIRECTORIES "${3RD_DIR}/tcp_udp_communicate/include"
+                add_library(udp-tcp-communicate_packaged STATIC IMPORTED)
+                set_target_properties(udp-tcp-communicate_packaged PROPERTIES
+                    IMPORTED_LOCATION "${3RD_DIR}/udp-tcp-communicate/lib/${CMAKE_STATIC_LIBRARY_PREFIX}udp-tcp-communicate${CMAKE_STATIC_LIBRARY_SUFFIX}"
+                    INTERFACE_INCLUDE_DIRECTORIES "${3RD_DIR}/udp-tcp-communicate/include"
                 )
             endif()
             
-            add_library(tcp_udp_communicate::tcp_udp_communicate ALIAS tcp_udp_communicate_packaged)
+            add_library(udp-tcp-communicate::udp-tcp-communicate ALIAS udp-tcp-communicate_packaged)
             return()
         else()
-            message(WARNING "Pre-packaged tcp_udp_communicate not found at ${3RD_DIR}/tcp_udp_communicate")
+            message(WARNING "Pre-packaged udp-tcp-communicate not found at ${3RD_DIR}/udp-tcp-communicate")
         endif()
     endif()
 
-    if(TCP_UDP_USE_LOCAL)
-        if(EXISTS "${3DEPEND_DIR}/tcp_udp_communicate/CMakeLists.txt")
-            message(STATUS "  Using local tcp_udp_communicate from ${3DEPEND_DIR}/tcp_udp_communicate")
+    if(UDPTCP_USE_LOCAL)
+        if(EXISTS "${3DEPEND_DIR}/udp-tcp-communicate/CMakeLists.txt")
+            message(STATUS "  Using local udp-tcp-communicate from ${3DEPEND_DIR}/udp-tcp-communicate")
             
             # 设置动态库选项传递给子项目
-            set(UDPTCP_BUILD_SHARED ${UDPTCP_SHARED} PARENT_SCOPE)
-            add_subdirectory("${3DEPEND_DIR}/tcp_udp_communicate" tcp_udp_communicate)
+            set(UDPTCP_BUILD_SHARED ${UDPTCP_USE_SHARED} PARENT_SCOPE)
+            set(SPDLOG_BUILD_SHARED ${SPDLOG_USE_SHARED})
+            add_subdirectory("${3DEPEND_DIR}/udp-tcp-communicate" udp-tcp-communicate)
             return()
         else()
-            message(WARNING "Local tcp_udp_communicate not found at ${3DEPEND_DIR}/tcp_udp_communicate")
+            message(WARNING "Local udp-tcp-communicate not found at ${3DEPEND_DIR}/udp-tcp-communicate")
         endif()
     endif()
 
-    if(TCP_UDP_USE_FETCH)
-        message(STATUS "  Using FetchContent for tcp_udp_communicate")
+    if(UDPTCP_USE_FETCH)
+        message(STATUS "  Using FetchContent for udp-tcp-communicate")
         include(FetchContent)
         FetchContent_Declare(
-            tcp_udp_communicate
-            GIT_REPOSITORY https://github.com/your-username/tcp_udp_communicate.git
+            udp-tcp-communicate
+            GIT_REPOSITORY https://github.com/3shisan3/udp-tcp-communicate.git
             GIT_TAG main
         )
         
         # 设置动态库选项
-        set(BUILD_SHARED_LIBS ${UDPTCP_SHARED})
-        FetchContent_MakeAvailable(tcp_udp_communicate)
+        set(BUILD_SHARED_LIBS ${UDPTCP_USE_SHARED})
+        FetchContent_MakeAvailable(udp-tcp-communicate)
         return()
     endif()
 
-    message(FATAL_ERROR "No tcp_udp_communicate dependency strategy selected or available")
+    message(FATAL_ERROR "No udp-tcp-communicate dependency strategy selected or available")
 endfunction()
 
 # 验证依赖策略冲突 (应该保证唯一性，确保 option 中是互斥设置)
