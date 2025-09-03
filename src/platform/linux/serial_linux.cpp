@@ -5,10 +5,10 @@
 
 #include "serial_linux.h"
 
-#include <fcntl.h>
-#include <unistd.h>
 #include <errno.h>
+#include <fcntl.h>
 #include <string.h>
+#include <unistd.h>
 
 LinuxSerialPort::LinuxSerialPort() : fd_(-1) {}
 

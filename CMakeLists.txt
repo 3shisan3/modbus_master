@@ -11,6 +11,11 @@ set(3RD_DIR ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/${SDK_PLATFORM})
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)  # 强制所有目标编译为PIC
+# set(CMAKE_BUILD_TYPE "Release")
+
+# 添加编译输出目录
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 
 # 源码目录
 set(SOURCE_CODE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
@@ -31,7 +36,7 @@ file(GLOB_RECURSE PROJECT_SRCS
 
 # 补充依赖库内容
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/depend.cmake)
-# manage_spdlog()   # 依赖 udp-tcp-communicate 中依赖
+manage_spdlog()
 manage_asio()
 manage_fmt()
 manage_udptcp()
@@ -45,7 +50,8 @@ endif()
 
 # 链接库
 target_link_libraries(${PROJECT_NAME} PRIVATE
-    # spdlog::spdlog
+    spdlog::spdlog
     udp-tcp-communicate
-    fmt::fmt)
+    fmt::fmt
+)
 

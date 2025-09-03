@@ -45,7 +45,7 @@ function(manage_spdlog)
             message(STATUS "  Using local spdlog from ${3DEPEND_DIR}/spdlog")
 
             # 设置动态库选项传递给子项目
-            set(SPDLOG_BUILD_SHARED ${SPDLOG_USE_SHARED} PARENT_SCOPE)
+            set(SPDLOG_BUILD_SHARED ${SPDLOG_USE_SHARED})
             add_subdirectory("${3DEPEND_DIR}/spdlog" spdlog)
             return()
         else()

@@ -4,6 +4,8 @@
  */
 
 #pragma once
+
+#include <cstdint>
 #include <termios.h>
 #include <string>
 #include <vector>
