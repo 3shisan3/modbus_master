@@ -25,12 +25,14 @@ include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/platform.cmake)
 # 包含目录
 include_directories(
     ${SOURCE_CODE_DIR}/communicate
+    ${SOURCE_CODE_DIR}/driver
     ${PLATFORM_HEADERS}
 )
 
 # 收集项目源文件
 file(GLOB_RECURSE PROJECT_SRCS
     ${SOURCE_CODE_DIR}/communicate/*.cpp
+    ${SOURCE_CODE_DIR}/driver/*.cpp
     ${PLATFORM_SOURCES}
 )
 

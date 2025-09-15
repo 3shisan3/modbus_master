@@ -13,7 +13,7 @@
 namespace modbus
 {
 
-class ModbusUdpMaster : public ModbusMaster
+class ModbusUdpMaster : public SsModbusMaster
 {
 public:
     /**
@@ -21,7 +21,7 @@ public:
      * @param ip 目标设备IP地址
      * @param port 目标设备端口号
      */
-    explicit ModbusUdpMaster(const std::string& ip, uint16_t port);
+    explicit ModbusUdpMaster(const std::string &ip, uint16_t port);
     ~ModbusUdpMaster() override;
 
     /**
@@ -31,8 +31,8 @@ public:
      * @return Modbus响应对象
      * @throw std::runtime_error 如果通信失败或超时
      */
-    ModbusResponse send_request(const ModbusRequest& request,
-                              std::chrono::milliseconds timeout) override;
+    ModbusResponse send_request(const ModbusRequest &request,
+                                std::chrono::milliseconds timeout) override;
 
 private:
     class Impl;

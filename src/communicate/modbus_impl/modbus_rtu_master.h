@@ -12,14 +12,14 @@
 namespace modbus
 {
 
-class ModbusRtuMaster : public ModbusMaster
+class ModbusRtuMaster : public SsModbusMaster
 {
 public:
-    explicit ModbusRtuMaster(const std::string& port, uint32_t baudrate = 9600, Parity parity = Parity::NONE);
+    explicit ModbusRtuMaster(const std::string &port, uint32_t baudrate = 9600, Parity parity = Parity::NONE);
     ~ModbusRtuMaster() override;
 
-    ModbusResponse send_request(const ModbusRequest& request,
-                              std::chrono::milliseconds timeout) override;
+    ModbusResponse send_request(const ModbusRequest &request,
+                                std::chrono::milliseconds timeout) override;
 
 private:
     class Impl;
