@@ -3,6 +3,11 @@
 # spdlog依赖管理 (支持指定编译生成动态库)
 function(manage_spdlog)
     message(STATUS "Configuring spdlog dependency...")
+
+    if(TARGET spdlog OR TARGET spdlog::spdlog)
+        message(STATUS "  spdlog target already exists, skipping configuration")
+        return()
+    endif()
     
     if(SPDLOG_USE_SYSTEM)
         find_package(spdlog QUIET)

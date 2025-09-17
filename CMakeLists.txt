@@ -38,10 +38,10 @@ file(GLOB_RECURSE PROJECT_SRCS
 
 # 补充依赖库内容
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/depend.cmake)
+manage_udptcp()
 manage_spdlog()
 manage_asio()
 manage_fmt()
-manage_udptcp()
 
 # 编译生成库
 if(MODBUS_BUILD_SHARED OR BUILD_SHARED_LIBS)
